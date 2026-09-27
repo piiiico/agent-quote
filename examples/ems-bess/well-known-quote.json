@@ -1,0 +1,8 @@
+{
+  "agentquote": "0.1",
+  "rfq_url": "https://example.com/fjordstyring/agent-quote/rfq",
+  "categories": ["ems-bess"],
+  "response": "async",
+  "max_response_hours": 24,
+  "seller": { "name": "Fjordstyring AS (fictional)" }
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/piiiico/agent-quote/schema/well-known.schema.json",
+  "title": "agent-quote discovery document, served at /.well-known/quote",
+  "type": "object",
+  "required": ["agentquote", "rfq_url", "categories"],
+  "additionalProperties": false,
+  "properties": {
+    "agentquote": { "const": "0.1" },
+    "rfq_url": { "type": "string", "format": "uri", "description": "POST an RFQ here (application/json)." },
+    "categories": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "response": { "enum": ["sync", "async"], "description": "sync = the POST returns the quote; async = it goes to rfq.reply_to." },
+    "max_response_hours": { "type": "number", "minimum": 0 },
+    "seller": { "$ref": "rfq.schema.json#/$defs/party" }
+  }
+}

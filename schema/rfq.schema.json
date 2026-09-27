@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/piiiico/agent-quote/schema/rfq.schema.json",
+  "title": "agent-quote RFQ v0.1",
+  "description": "A buyer's requirement as typed fields and checkable constraints. No prose beyond a one-line summary.",
+  "type": "object",
+  "required": ["agentquote", "type", "id", "issued_at", "reply_by", "buyer", "category", "currency", "requirements", "reply_to"],
+  "additionalProperties": false,
+  "properties": {
+    "agentquote": { "const": "0.1" },
+    "type": { "const": "rfq" },
+    "id": { "type": "string", "minLength": 1 },
+    "issued_at": { "type": "string", "format": "date-time" },
+    "reply_by": { "type": "string", "format": "date-time" },
+    "buyer": { "$ref": "#/$defs/party" },
+    "category": { "type": "string", "description": "Shared key vocabulary for this product class, e.g. 'ems-bess'. See profiles/." },
+    "summary": { "type": "string", "maxLength": 200 },
+    "site": {
+      "type": "object",
+      "description": "Facts about the buyer's situation that the seller needs to price. key -> {value, unit}.",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["value"],
+        "additionalProperties": false,
+        "properties": { "value": {}, "unit": { "type": "string" } }
+      }
+    },
+    "requirements": {
+      "type": "array",
+      "description": "Checked by the BUYER against the quote's claims. A seller cannot mark a requirement met; it can only make a claim with evidence.",
+      "items": {
+        "type": "object",
+        "required": ["id", "key", "op", "value", "level"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "key": { "type": "string", "description": "Claim key the quote must answer." },
+          "op": { "enum": ["eq", "gte", "lte", "includes", "any_of"] },
+          "value": {},
+          "level": { "enum": ["must", "prefer"] },
+          "note": { "type": "string", "maxLength": 200 }
+        }
+      }
+    },
+    "currency": { "type": "string", "pattern": "^[A-Z]{3}$" },
+    "delivery_by": { "type": "string", "format": "date" },
+    "validity_wanted_days": { "type": "integer", "minimum": 1 },
+    "horizon_years": { "type": "integer", "minimum": 1, "description": "Years the buyer uses to compare total cost." },
+    "reply_to": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": { "url": { "type": "string", "format": "uri" }, "email": { "type": "string", "format": "email" } }
+    }
+  },
+  "$defs": {
+    "party": {
+      "type": "object",
+      "required": ["name"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string" },
+        "org_id": { "type": "string", "description": "Registry id, e.g. 'NO:928605612'." },
+        "agent": {
+          "type": "object",
+          "required": ["name"],
+          "additionalProperties": false,
+          "properties": {
+            "name": { "type": "string" },
+            "operator": { "type": "string", "description": "Who runs the agent." },
+            "jwks_uri": { "type": "string", "format": "uri" }
+          }
+        }
+      }
+    }
+  }
+}

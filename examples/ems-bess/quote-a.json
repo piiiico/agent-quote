@@ -1,0 +1,30 @@
+{
+  "agentquote": "0.1",
+  "type": "quote",
+  "id": "fs-q-4471",
+  "rfq_id": "rfq-2026-0928-ems-01",
+  "issued_at": "2026-09-30T10:12:00Z",
+  "valid_until": "2026-11-30",
+  "binding": true,
+  "seller": { "name": "Fjordstyring AS (fictional)", "agent": { "name": "fs-sales-agent", "operator": "Fjordstyring AS" } },
+  "currency": "NOK",
+  "price": [
+    { "id": "p1", "item": "FS-200 edge controller", "kind": "one_time", "amount": 24900, "qty": 1 },
+    { "id": "p2", "item": "On-site commissioning, 1 day", "kind": "one_time", "amount": 9500, "qty": 1 },
+    { "id": "p3", "item": "Optimisation licence", "kind": "per_year", "amount": 7200 },
+    { "id": "p4", "item": "Aggregator fee on aFRR revenue", "kind": "share", "pct": 25, "of": "aFRR capacity revenue paid out" }
+  ],
+  "includes": ["Edge controller with 4G failover", "RS485 and Ethernet Modbus gateway", "Commissioning on site", "Monthly savings report"],
+  "excludes": ["Electrician work on the AC side", "HAN port reader", "Grid-operator paperwork"],
+  "lead_time_days": 42,
+  "conditions": { "payment_terms_days": 30, "warranty_years": 3, "licence_notice_months": 3, "prices_ex_vat": true },
+  "claims": [
+    { "key": "integration.protocols", "value": ["modbus-tcp", "modbus-rtu"], "evidence": [{ "type": "datasheet", "url": "https://example.com/fjordstyring/fs-200-datasheet.pdf" }] },
+    { "key": "inverter.supported", "value": ["deye-sg04lp3", "deye-sg01hp3", "sungrow-sh-rt"], "evidence": [{ "type": "reference_site", "url": "https://example.com/fjordstyring/ref/bryne-greenhouse", "note": "Deye SG04LP3 x2, 60 kWh, running since 2025-11" }] },
+    { "key": "strategies", "value": ["peak-shaving-capacity-tariff", "spot-arbitrage", "pv-self-consumption"], "evidence": [{ "type": "datasheet", "url": "https://example.com/fjordstyring/fs-200-datasheet.pdf" }] },
+    { "key": "fallback.on_cloud_loss", "value": "inverter-native-schedule", "evidence": [{ "type": "test_report", "url": "https://example.com/fjordstyring/failover-test-2026-05.pdf" }] },
+    { "key": "data.hosting_region", "value": "EU", "evidence": [{ "type": "other", "url": "https://example.com/fjordstyring/dpa.pdf", "note": "Data processing agreement, hosting in eu-north-1" }] },
+    { "key": "markets.flexibility", "value": ["afrr"], "evidence": [{ "type": "registry", "url": "https://example.com/fjordstyring/statnett-aggregator-listing", "note": "Pooled bids via a prequalified aggregator" }] },
+    { "key": "api.read_access", "value": true, "evidence": [] }
+  ]
+}

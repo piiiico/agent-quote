@@ -1,0 +1,15 @@
+{
+  "name": "agent-quote",
+  "version": "0.1.0",
+  "description": "An RFQ -> quote format for agents: typed requirements, priced lines with units, claims with evidence. No prose.",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "test": "node test.mjs",
+    "demo": "node compare.mjs examples/ems-bess/rfq.json examples/ems-bess/quote-a.json examples/ems-bess/quote-b.json"
+  },
+  "devDependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1"
+  }
+}

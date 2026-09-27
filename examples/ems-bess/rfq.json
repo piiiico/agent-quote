@@ -1,0 +1,38 @@
+{
+  "agentquote": "0.1",
+  "type": "rfq",
+  "id": "rfq-2026-0928-ems-01",
+  "issued_at": "2026-09-28T08:00:00Z",
+  "reply_by": "2026-10-12T16:00:00Z",
+  "buyer": {
+    "name": "Battery distributor, Sandnes NO (example)",
+    "agent": { "name": "buyer-agent (example)", "operator": "the buyer" }
+  },
+  "category": "ems-bess",
+  "summary": "EMS for one commercial battery on a Deye 3-phase inverter stack, peak-shaving and spot first",
+  "site": {
+    "battery_capacity": { "value": 120, "unit": "kWh" },
+    "battery_chemistry": { "value": "LiFePO4" },
+    "inverter": { "value": "Deye SUN-12K-SG04LP3-EU", "unit": "x4 in parallel" },
+    "inverter_power": { "value": 48, "unit": "kW" },
+    "grid_connection": { "value": 250, "unit": "A @ 400 V 3-phase" },
+    "dso": { "value": "Lnett" },
+    "bidding_zone": { "value": "NO2" },
+    "meter_interface": { "value": "AMS HAN port" }
+  },
+  "requirements": [
+    { "id": "r1", "key": "integration.protocols", "op": "includes", "value": "modbus-tcp", "level": "must" },
+    { "id": "r2", "key": "inverter.supported", "op": "includes", "value": "deye-sg04lp3", "level": "must" },
+    { "id": "r3", "key": "strategies", "op": "includes", "value": "peak-shaving-capacity-tariff", "level": "must", "note": "Norwegian capacity tariff: average of the 3 highest hourly peaks per month" },
+    { "id": "r4", "key": "strategies", "op": "includes", "value": "spot-arbitrage", "level": "must" },
+    { "id": "r5", "key": "fallback.on_cloud_loss", "op": "eq", "value": "inverter-native-schedule", "level": "must" },
+    { "id": "r6", "key": "data.hosting_region", "op": "any_of", "value": ["EU", "EEA"], "level": "must" },
+    { "id": "r7", "key": "markets.flexibility", "op": "includes", "value": "afrr", "level": "prefer", "note": "Only via an aggregator; 48 kW is far below the minimum bid" },
+    { "id": "r8", "key": "api.read_access", "op": "eq", "value": true, "level": "prefer" }
+  ],
+  "currency": "NOK",
+  "delivery_by": "2027-01-15",
+  "validity_wanted_days": 60,
+  "horizon_years": 5,
+  "reply_to": { "email": "rfq@example.com" }
+}

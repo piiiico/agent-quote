@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/piiiico/agent-quote/schema/quote.schema.json",
+  "title": "agent-quote QUOTE v0.1",
+  "description": "A seller's answer to an RFQ: priced lines with units, scope as lists, and every product fact as a claim with evidence.",
+  "type": "object",
+  "required": ["agentquote", "type", "id", "rfq_id", "issued_at", "valid_until", "binding", "seller", "currency", "price", "includes", "excludes", "lead_time_days", "claims"],
+  "additionalProperties": false,
+  "properties": {
+    "agentquote": { "const": "0.1" },
+    "type": { "const": "quote" },
+    "id": { "type": "string" },
+    "rfq_id": { "type": "string" },
+    "issued_at": { "type": "string", "format": "date-time" },
+    "valid_until": { "type": "string", "format": "date" },
+    "binding": { "type": "boolean", "description": "true = a firm offer the buyer can accept until valid_until. false = indicative." },
+    "seller": { "$ref": "rfq.schema.json#/$defs/party" },
+    "currency": { "type": "string", "pattern": "^[A-Z]{3}$" },
+    "price": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "item", "kind"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "item": { "type": "string", "maxLength": 120 },
+          "kind": { "enum": ["one_time", "per_year", "per_month", "share"] },
+          "amount": { "type": "number", "minimum": 0, "description": "Excl. VAT, in the quote currency. Required unless kind=share." },
+          "qty": { "type": "number", "minimum": 0, "default": 1 },
+          "pct": { "type": "number", "minimum": 0, "maximum": 100, "description": "kind=share only." },
+          "of": { "type": "string", "description": "kind=share only: what the percentage is taken of." }
+        },
+        "if": { "properties": { "kind": { "const": "share" } } },
+        "then": { "required": ["pct", "of"] },
+        "else": { "required": ["amount"] }
+      }
+    },
+    "includes": { "type": "array", "items": { "type": "string", "maxLength": 120 } },
+    "excludes": { "type": "array", "items": { "type": "string", "maxLength": 120 } },
+    "lead_time_days": { "type": "integer", "minimum": 0 },
+    "conditions": {
+      "type": "object",
+      "description": "Commercial terms as scalars, e.g. payment_terms_days, warranty_years, notice_months.",
+      "additionalProperties": { "type": ["string", "number", "boolean"] }
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["key", "value", "evidence"],
+        "additionalProperties": false,
+        "properties": {
+          "key": { "type": "string" },
+          "value": {},
+          "evidence": {
+            "type": "array",
+            "description": "Empty is allowed and means: unverified. The buyer's agent decides what that costs.",
+            "items": {
+              "type": "object",
+              "required": ["type", "url"],
+              "additionalProperties": false,
+              "properties": {
+                "type": { "enum": ["datasheet", "certificate", "reference_site", "test_report", "registry", "other"] },
+                "url": { "type": "string", "format": "uri" },
+                "id": { "type": "string" },
+                "note": { "type": "string", "maxLength": 200 }
+              }
+            }
+          }
+        }
+      }
+    },
+    "signature": {
+      "type": "object",
+      "description": "Optional. Detached JWS (EdDSA) over the RFC 8785 canonical form of this object without 'signature'. Shape only in v0.1; the demo does not sign.",
+      "required": ["alg", "kid", "jwks_uri", "jws"],
+      "additionalProperties": false,
+      "properties": {
+        "alg": { "const": "EdDSA" },
+        "kid": { "type": "string" },
+        "jwks_uri": { "type": "string", "format": "uri" },
+        "jws": { "type": "string" }
+      }
+    }
+  }
+}

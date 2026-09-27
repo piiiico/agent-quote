@@ -1,0 +1,27 @@
+{
+  "agentquote": "0.1",
+  "type": "quote",
+  "id": "KW-2026-118",
+  "rfq_id": "rfq-2026-0928-ems-01",
+  "issued_at": "2026-10-01T07:40:00Z",
+  "valid_until": "2026-10-31",
+  "binding": false,
+  "seller": { "name": "Kilowise GmbH (fictional)", "agent": { "name": "kilowise-quote-bot", "operator": "Kilowise GmbH" } },
+  "currency": "NOK",
+  "price": [
+    { "id": "l1", "item": "Software licence, per site", "kind": "per_month", "amount": 690 },
+    { "id": "l2", "item": "Remote onboarding", "kind": "one_time", "amount": 0 }
+  ],
+  "includes": ["Cloud optimiser", "Remote onboarding session", "Web dashboard", "Read API"],
+  "excludes": ["Any hardware", "RS485-to-Ethernet gateway (buyer supplies)", "On-site work", "Flexibility market participation"],
+  "lead_time_days": 14,
+  "conditions": { "payment_terms_days": 14, "licence_notice_months": 1, "prices_ex_vat": true },
+  "claims": [
+    { "key": "integration.protocols", "value": ["modbus-tcp"], "evidence": [{ "type": "datasheet", "url": "https://example.com/kilowise/integration-guide" }] },
+    { "key": "inverter.supported", "value": ["deye-sg04lp3", "victron-multiplus"], "evidence": [{ "type": "datasheet", "url": "https://example.com/kilowise/compat-list" }] },
+    { "key": "strategies", "value": ["spot-arbitrage", "peak-shaving-capacity-tariff"], "evidence": [{ "type": "datasheet", "url": "https://example.com/kilowise/integration-guide" }] },
+    { "key": "fallback.on_cloud_loss", "value": "inverter-native-schedule", "evidence": [] },
+    { "key": "data.hosting_region", "value": "EU", "evidence": [{ "type": "other", "url": "https://example.com/kilowise/privacy" }] },
+    { "key": "api.read_access", "value": true, "evidence": [{ "type": "datasheet", "url": "https://example.com/kilowise/api" }] }
+  ]
+}
